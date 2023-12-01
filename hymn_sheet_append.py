@@ -1,5 +1,5 @@
 import requests
-import fitz
+import PyPDF2
 import os
 from urllib.request import urlopen
 from os import listdir, walk
@@ -47,18 +47,16 @@ def get_file_names(full_path):
         return filenames
 
 def append_hymns(all_files, full_path, final_name):
-    doc = fitz.open()
+    append_pdf = PyPDF2.PdfMerger()
     for unique_file in all_files:
-        with fitz.open(f'{ full_path }\\{ unique_file }') as mfile:
-            doc.insert_pdf(mfile)
-    doc.save(f'{full_path}\\{ final_name }.pdf')
-    doc.close()
-            
+        append_pdf.append(f'{ full_path }\\{ unique_file }')
+    append_pdf.write(f'{full_path}\\{ final_name }.pdf')
+    append_pdf.close()
 
-full_path = 'C:\\Users\\Desenv\\Downloads\\hymns'
+full_path = ''
 check_path(full_path)
 download_hymns(1, 1348, 'h', full_path) #traditionais
 download_hymns(1, 75, 's', full_path) #suplementos
-download_hymns(1424, 1500, 'n', full_path) #novos
+download_hymns(1424, 1503, 'n', full_path) #novos
 filenames = get_file_names(full_path)
 append_hymns(filenames, full_path, 'full_hymns')
