@@ -4,6 +4,7 @@ import os
 from urllib.request import urlopen
 from os import listdir, walk
 from os.path import isfile, join
+import re
 
 MAIN_URL = ''
 
@@ -61,10 +62,14 @@ def split_pages(originalFileName, newPath):
         with open(newPath % (i + 1), "wb") as outputStream:
             output.write(outputStream)
 
+def num_sort(test_string):
+    return list(map(int, re.findall(r'\d+', test_string)))[0]
+
 full_path = ''
 check_path(full_path)
 download_hymns(1, 1348, 'h', full_path) #traditionais
 download_hymns(1, 75, 's', full_path) #suplementos
 download_hymns(1424, 1503, 'n', full_path) #novos
 filenames = get_file_names(full_path)
+filenames.sort(key=num_sort) 
 append_hymns(filenames, full_path, 'full_hymns')
