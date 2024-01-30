@@ -53,6 +53,14 @@ def append_hymns(all_files, full_path, final_name):
     append_pdf.write(f'{full_path}\\{ final_name }.pdf')
     append_pdf.close()
 
+def split_pages(originalFileName, newPath):
+    originalFileContent = PdfReader(open(originalFileName, "rb"))
+    for i in range(len(originalFileContent.pages)):
+        output = PdfWriter()
+        output.add_page(originalFileContent.pages[i])
+        with open(newPath % (i + 1), "wb") as outputStream:
+            output.write(outputStream)
+
 full_path = ''
 check_path(full_path)
 download_hymns(1, 1348, 'h', full_path) #traditionais
